@@ -34,7 +34,7 @@ def query_horizons(id_string):
             id_number = html_content[start_index:end_index]
     else:
         print("Multiple matches found, narrow search down and reinput string ID based on query output")
-        print("******************************************************************************")
+        print("**************************************************************************************")
         extract_count = '"count":'
         total_cnt_str_start_idx = html_content.find(extract_count) + len(extract_count)
         total_cnt_str_idx = html_content.find(',', total_cnt_str_start_idx)
