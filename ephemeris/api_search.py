@@ -1,5 +1,9 @@
 import urllib.request
 import json
+import ssl
+import certifi
+
+ctx = ssl.create_default_context(cafile=certifi.where())
 
 def query_horizons(id_string):
     if " " in id_string:
@@ -8,7 +12,7 @@ def query_horizons(id_string):
     url_begin_str = "https://ssd.jpl.nasa.gov/api/horizons_lookup.api?sstr="
     url = url_begin_str + id_string
     try:
-        with urllib.request.urlopen(url) as response:
+        with urllib.request.urlopen(url, context=ctx) as response:
             html_bytes = response.read()
             html_content = html_bytes.decode('utf-8')
     except urllib.error.URLError as e:

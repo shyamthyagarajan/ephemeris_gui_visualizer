@@ -51,9 +51,9 @@ def plot_trajectories(data_map, parent=None, title=None):
     all_x = np.concatenate([body_data[s][0] for s in body_data])
     all_y = np.concatenate([body_data[s][1] for s in body_data])
     all_z = np.concatenate([body_data[s][2] for s in body_data])
-    ax.set_xlim([all_x.min(), all_x.max()])
-    ax.set_ylim([all_y.min(), all_y.max()])
-    ax.set_zlim([all_z.min(), all_z.max()])
+    ax.set_xlim([min(all_x.min(), 0), max(all_x.max(), 0)])
+    ax.set_ylim([min(all_y.min(), 0), max(all_y.max(), 0)])
+    ax.set_zlim([min(all_z.min(), 0), max(all_z.max(), 0)])
 
     ax.legend(loc='upper left', bbox_to_anchor=(1.05, 1), borderaxespad=0.)
     if title:
