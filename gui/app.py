@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Ephemeris Visualizer")
-        self.resize(600, 800)
+        self.resize(600, 550)
 
         layout = QVBoxLayout()
         layout.setSpacing(5)
@@ -71,6 +71,9 @@ class MainWindow(QMainWindow):
         self.ephemeris_search = QPushButton("Add New Body")
         self.ephemeris_search.clicked.connect(self.on_search)
 
+        self.remove_body = QPushButton("Remove Body from List")
+        self.remove_body.clicked.connect(self.on_remove)
+
         self.generate_results = QPushButton("Generate Results")
         self.generate_results.clicked.connect(self.on_generate)
         
@@ -94,6 +97,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(QLabel("<b>New Ephemeris Body</b>"))
         layout.addWidget(self.ephemeris_body_input)
         layout.addWidget(self.ephemeris_search)
+        layout.addWidget(self.remove_body)
         layout.addWidget(self.generate_results)
 
         widget = QWidget()
@@ -165,3 +169,11 @@ class MainWindow(QMainWindow):
                 item.setFlags(item.flags() | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
                 item.setCheckState(Qt.Checked)
                 self.ephemeris_body_list.addItem(item)
+    
+    def on_remove(self):
+        currentItem = self.ephemeris_body_list.currentItem()
+        if currentItem:
+            name = currentItem.text()
+            self.ephemeris_body_list.takeItem(self.ephemeris_body_list.row(currentItem))
+            if name in BODIES:
+                del BODIES[name]
