@@ -1,13 +1,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from PyQt5.QtWidgets import QDialog, QVBoxLayout
 from data.bodies import BODIES, ID_TO_NAME
 
 # Source: https://acme.byu.edu/00000179-d3f1-d7a6-a5fb-ffff6a210001/animation-pdf#:~:text=Saving%20Animations,solution%20is%20to%20use%20the
 
-def plot_trajectories(data_map):
+def plot_trajectories(data_map, parent=None, title=None):
     plt.style.use('dark_background')
-    fig = plt.figure()
+    dialog = QDialog(parent)
+    dialog.setWindowTitle("Orbit Visualization")
+    dialog.resize(900, 700)
+    layout = QVBoxLayout()
+    dialog.setLayout(layout)
+
+    fig = Figure(facecolor='black')
+    canvas = FigureCanvas(fig)
+    layout.addWidget(canvas)
+
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter([0],[0],[0], color='yellow', s=400, label='Sun')
     lines = {}
@@ -18,7 +30,7 @@ def plot_trajectories(data_map):
         color = BODIES[name]['color'] if name in BODIES else 'white'
 
         t, x, y, z = data_map[satellite]
-        body, = ax.plot([], [], [], marker='o', color=color, label=satellite)
+        body, = ax.plot([], [], [], marker='o', color=color, label=name)
         traj, = ax.plot([], [], [], color=color, alpha=0.75)
         lines[satellite] = (body, traj)
         body_data[satellite] = (x, y, z)
@@ -43,8 +55,9 @@ def plot_trajectories(data_map):
     ax.set_ylim([all_y.min(), all_y.max()])
     ax.set_zlim([all_z.min(), all_z.max()])
 
-    ani = FuncAnimation(fig, update, frames=num_frames, interval=25)
     ax.legend(loc='upper left', bbox_to_anchor=(1.05, 1), borderaxespad=0.)
+    if title:
+        ax.set_title(title, color='white', pad=20)
     ax.set_xlabel('x (AU)', color='white')
     ax.set_ylabel('y (AU)', color='white')
     ax.set_zlabel('z (AU)', color='white')
@@ -56,7 +69,11 @@ def plot_trajectories(data_map):
     ax.yaxis.pane.set_edgecolor('black')
     ax.zaxis.pane.set_edgecolor('black')
     ax.grid(True, color='white', alpha=0.1)
-    plt.show()
+
+    ani = FuncAnimation(fig, update, frames=num_frames, interval=25)
+    canvas.draw()
+    dialog.ani = ani
+    dialog.exec_()
 
 if __name__ == "__main__":
     from ephemeris.horizons import fetch_horizons_data
