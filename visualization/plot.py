@@ -16,7 +16,7 @@ def plot_trajectories(data_map, parent=None, title=None):
     layout = QVBoxLayout()
     dialog.setLayout(layout)
 
-    fig = Figure(facecolor='black')
+    fig = Figure(facecolor='black', figsize=(16, 9))
     canvas = FigureCanvas(fig)
     layout.addWidget(canvas)
 
