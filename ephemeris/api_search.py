@@ -1,6 +1,26 @@
 import urllib.request
 
 def query_horizons(id_string):
+    """
+    Queries the JPL Horizons Lookup API to resolve a body name or designation
+    to a Horizons-compatible ID.
+
+    Handles three response cases:
+        - No match: returns empty dict {}
+        - Single match: returns the ID string directly
+        - Multiple matches: returns a dict of {name: id} for all candidates
+
+    Parameters:
+        id_string (str): Body name or designation to search (e.g. 'Apophis', 'Voyager 2')
+
+    Returns:
+        str | dict: Single ID string on unambiguous match, dict of candidates
+                    on multiple matches, empty dict on no match.
+
+    Limitations:
+        - Periodic comets with multiple historical apparitions (e.g. Halley's Comet)
+          are not supported due to ambiguity in JPL Horizons records.
+    """
     if " " in id_string:
         id_string = id_string.replace(" ", "%20")
 

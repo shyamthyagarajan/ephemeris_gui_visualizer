@@ -13,6 +13,10 @@ matplotlib.use('Qt5Agg')
 # Source: https://www.pythonguis.com/tutorials/creating-your-first-pyqt-window/
 
 class BodySelectionDialog(QDialog):
+    """
+    Dialog window displayed when a body search returns multiple matches.
+    Presents the user with a list of candidates to select from.
+    """
     def __init__(self, api_search_dict):
         super().__init__()
         self.selected_id = None
@@ -36,12 +40,18 @@ class BodySelectionDialog(QDialog):
         self.setLayout(layout)
 
     def on_select(self):
+        """Stores the selected body name and ID, then closes the dialog."""
         selected = self.ephemeris_body_list.currentItem()
         if selected:
             self.selected_name = selected.text()
             self.selected_id = self.api_search_dict[selected.text()]
             self.accept()
 class MainWindow(QMainWindow):
+    """
+    Main application window for the Ephemeris GUI Visualizer.
+    Allows users to select solar system bodies, set a date range and step size,
+    and generate an animated 3D heliocentric orbit visualization.
+    """
     def __init__(self):
         super().__init__()
 
@@ -107,6 +117,10 @@ class MainWindow(QMainWindow):
         layout.addStretch()
     
     def on_generate(self):
+        """
+        Collects all checked bodies, date range, and step size from the GUI,
+        fetches trajectory data from JPL Horizons, and launches the visualization.
+        """
         selected_names = []
         satellite_id_list = []
         for i in range(self.ephemeris_body_list.count()):
@@ -124,12 +138,14 @@ class MainWindow(QMainWindow):
         plot_trajectories(data_map, parent=self, title=title)
 
     def on_item_changed(self, item):
+        """Prints check state changes to console for debugging."""
         if item.checkState() == Qt.Checked:
             print(f"'{item.text()}' checked")
         elif item.checkState() == Qt.Unchecked:
             print(f"'{item.text()}' unchecked")
 
     def on_item_double_clicked(self, item):
+        """Opens a color picker dialog to update the display color of a body."""
         color = QColorDialog.getColor()
         if color.isValid():
             BODIES[item.text()]['color'] = color.name()
@@ -138,6 +154,11 @@ class MainWindow(QMainWindow):
             item.setIcon(QIcon(pixmap))
 
     def on_search(self):
+        """
+        Queries JPL Horizons for the body name entered by the user.
+        Handles three cases: no match, single match, and multiple matches.
+        On success, prompts the user for a color and adds the body to the list.
+        """
         body_input = self.ephemeris_body_input.text()
         result = query_horizons(body_input)
 
@@ -172,6 +193,10 @@ class MainWindow(QMainWindow):
                 self.ephemeris_body_list.addItem(item)
     
     def on_remove(self):
+        """
+        Removes the currently selected body from the list widget
+        and deletes it from the in-memory BODIES registry.
+        """
         currentItem = self.ephemeris_body_list.currentItem()
         if currentItem:
             name = currentItem.text()

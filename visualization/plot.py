@@ -9,6 +9,16 @@ from data.bodies import BODIES, ID_TO_NAME
 # Source: https://acme.byu.edu/00000179-d3f1-d7a6-a5fb-ffff6a210001/animation-pdf#:~:text=Saving%20Animations,solution%20is%20to%20use%20the
 
 def plot_trajectories(data_map, parent=None, title=None):
+    """
+    Renders an animated 3D heliocentric orbit visualization for a set of solar system bodies.
+    Displays the animation in a maximized QDialog window embedded in the PyQt5 application.
+
+    Parameters:
+        data_map (dict): Map of body ID -> (datetime_jd, x, y, z) arrays, as returned
+                         by fetch_horizons_data()
+        parent (QWidget, optional): Parent widget for the dialog window
+        title (str, optional): Plot title displayed above the visualization
+    """
     plt.style.use('dark_background')
     dialog = QDialog(parent)
     dialog.setWindowTitle("Orbit Visualization")
@@ -47,6 +57,10 @@ def plot_trajectories(data_map, parent=None, title=None):
     num_frames = len(first_sat[0])
 
     def update(i):
+        """
+        Animation update function called by FuncAnimation at each frame.
+        Updates the position dot and trailing trajectory line for each body.
+        """
         for satellite in body_data:
             x, y, z = body_data[satellite]
             body, traj = lines[satellite]

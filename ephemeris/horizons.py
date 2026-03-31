@@ -2,6 +2,20 @@ import numpy as np
 from astroquery.jplhorizons import Horizons
 
 def fetch_horizons_data(satellite_id_list, start_time, stop_time, step_val):
+  """
+    Fetches heliocentric position vectors for a list of solar system bodies
+    from the JPL Horizons API.
+
+    Parameters:
+        satellite_id_list (list): List of JPL Horizons body IDs (e.g. ['99942', '-64'])
+        start_time (str): Start date in 'YYYY-MM-DD' format
+        stop_time (str): Stop date in 'YYYY-MM-DD' format
+        step_val (str): Time step between data points (e.g. '1h', '30m', '1d')
+
+    Returns:
+        dict: Map of body ID -> (datetime_jd, x, y, z) arrays in AU,
+              all positions relative to the Sun (@sun)
+  """
   data_map = {}
   for satellite in satellite_id_list:
     position_time_obj = Horizons(id=satellite,location = '@sun', \
