@@ -27,7 +27,7 @@ python main.py
 ## Usage
 
 1. Make selections within the GUI interface
-    ![Osiris_Apex Visualization](example_data_run/README.png)
+    ![Osiris_Apex Visualization](example_data_run/README.jpg)
 
 2. Generate results for desired input selections (e.g. Apophis, Osiris-Apex, Earth rendezvous plot)
     ![Osiris_Apex Visualization](example_data_run/README.gif)
