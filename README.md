@@ -2,11 +2,6 @@
 
 This project allows the user to select ephemeris bodies of their choice, along with a desired date range, and generate a plot animation of the orbits fixed in a heliocentric frame (relative to the Sun). The GUI interface also offers the user the ability to change colors of the body/trail and input a desired step size value to slow down or speed up the simulation.
 
-## Development Notes
-This project was developed with AI assistance (Claude) for some code generation 
-and implementation. All technical content and system design/architectural 
-decisions as well as the majority of the coding were developed by me.
-
 ## Installation
 
 1. Clone the repository:
